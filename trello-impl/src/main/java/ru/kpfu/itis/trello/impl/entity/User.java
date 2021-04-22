@@ -13,8 +13,6 @@ import javax.persistence.*;
  */
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "account")
 public class User {
     @Id

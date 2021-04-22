@@ -3,6 +3,7 @@ package ru.kpfu.itis.trello.web.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,6 @@ public class JwtUtils {
     @Autowired
     private ModelMapper modelMapper;
 
-    private final JWTVerifier verification = JWT.require(Algorithm.HMAC256(secret)).build();
-
     public String generateRefreshToken(UserDto userDto) {
 
         return JWT.create()
@@ -58,13 +57,13 @@ public class JwtUtils {
                 .sign(Algorithm.HMAC256(secret));
     }
 
-    public boolean validateToken(String token) {
-        verification.verify(token);
+    public boolean validateToken(String token) throws JWTDecodeException {
+        getVerification().verify(token);
         return true;
     }
 
     public UserDto getUserDtoFromToken(String token) {
-        DecodedJWT decodedJWT = verification.verify(token);
+        DecodedJWT decodedJWT = getVerification().verify(token);
         UserDto userDto = modelMapper.map(decodedJWT.getClaims(), UserDto.class);
         userDto.setId(Long.valueOf(decodedJWT.getSubject()));
 
@@ -72,15 +71,18 @@ public class JwtUtils {
     }
 
     public Long getUserIdByToken(String token) {
-        return Long.valueOf(verification.verify(token).getSubject());
+        return Long.valueOf(getVerification().verify(token).getSubject());
 
     }
 
     public Collection<? extends GrantedAuthority> getRolesFromToken(String token) {
-        DecodedJWT decodedJWT = verification.verify(token);
+        DecodedJWT decodedJWT = getVerification().verify(token);
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(decodedJWT.getClaim("role").toString());
 
         return Collections.singleton(authority);
     }
 
+    private JWTVerifier getVerification() {
+        return JWT.require(Algorithm.HMAC256(secret)).build();
+    }
 }

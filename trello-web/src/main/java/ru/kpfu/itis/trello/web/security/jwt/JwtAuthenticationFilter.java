@@ -1,6 +1,7 @@
 package ru.kpfu.itis.trello.web.security.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -20,19 +21,15 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtils jwtUtil;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
         String jwtToken = extractJwtFromRequest(request);
 
-        if (StringUtils.hasText(jwtToken) && jwtUtil.validateToken(jwtToken)) {
+        if (StringUtils.hasText(jwtToken)) {
             JwtAuthentication authentication = new JwtAuthentication(jwtToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
         }
 
         chain.doFilter(request, response);
@@ -55,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String extractJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        String bearer = "Bearer:";
+        String bearer = "Bearer ";
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(bearer)) {
             return bearerToken.substring(bearer.length());

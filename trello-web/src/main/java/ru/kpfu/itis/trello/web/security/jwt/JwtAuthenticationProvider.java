@@ -1,7 +1,9 @@
 package ru.kpfu.itis.trello.web.security.jwt;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,15 +20,25 @@ import org.springframework.stereotype.Component;
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
     @Qualifier("jwtUserDetailsService")
     private UserDetailsService userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         JwtAuthentication tokenAuthentication = (JwtAuthentication) authentication;
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
-        tokenAuthentication.setAuthenticated(true);
-        tokenAuthentication.setUserDetails(userDetails);
+
+        try {
+            jwtUtils.validateToken(tokenAuthentication.getName());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
+            tokenAuthentication.setAuthenticated(true);
+            tokenAuthentication.setUserDetails(userDetails);
+        } catch (JWTDecodeException e) {
+            //TODO change exception class
+            throw new AccountExpiredException("Token authentication failed");
+        }
 
         return tokenAuthentication;
     }
