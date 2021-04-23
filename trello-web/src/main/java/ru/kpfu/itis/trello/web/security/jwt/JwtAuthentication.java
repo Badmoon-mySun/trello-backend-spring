@@ -18,7 +18,7 @@ public class JwtAuthentication implements Authentication {
 
     private boolean isAuthenticated;
 
-    private String jwtToken;
+    private final String jwtToken;
 
     public JwtAuthentication(String jwtToken) {
         this.jwtToken = jwtToken;

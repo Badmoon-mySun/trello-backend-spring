@@ -27,11 +27,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public List<UserDto> findAll() {
-        return userRepository.findAll().stream()
-                .map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<UserDto> findAll() {
+//        return userRepository.findAll().stream()
+//                .map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
+//    }
 
     @Override
     public Optional<UserDto> findById(Long id) {
@@ -46,15 +46,15 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user, UserDto.class);
     }
 
-    @Override
-    public Boolean delete(UserDto userDto) {
-        userRepository.delete(modelMapper.map(userDto, User.class));
-        return true;
-    }
+//    @Override
+//    public Boolean delete(UserDto userDto) {
+//        userRepository.delete(modelMapper.map(userDto, User.class));
+//        return true;
+//    }
 
-    @Override
-    public Boolean deleteById(Long id) {
-        userRepository.deleteById(id);
-        return true;
-    }
+//    @Override
+//    public Boolean deleteById(Long id) {
+//        userRepository.deleteById(id);
+//        return true;
+//    }
 }

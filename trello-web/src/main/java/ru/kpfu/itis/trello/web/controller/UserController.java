@@ -1,7 +1,6 @@
 package ru.kpfu.itis.trello.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kpfu.itis.trello.api.dto.UserDto;
 import ru.kpfu.itis.trello.api.service.UserService;
