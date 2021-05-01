@@ -7,6 +7,7 @@ import ru.kpfu.itis.trello.api.dto.TokenDto;
 import ru.kpfu.itis.trello.api.dto.UserDto;
 import ru.kpfu.itis.trello.api.dto.UserRegistrationDto;
 import ru.kpfu.itis.trello.api.service.AuthService;
+import ru.kpfu.itis.trello.api.service.VKAuthService;
 import ru.kpfu.itis.trello.impl.service.TokenUserService;
 import ru.kpfu.itis.trello.web.security.jwt.JwtUtils;
 
@@ -28,15 +29,15 @@ public class AuthController {
     private AuthService authService;
 
     @Autowired
+    private VKAuthService vkAuthService;
+
+    @Autowired
     private JwtUtils jwtUtils;
 
     @PostMapping("/signin")
     public TokenDto signIn(@Valid @RequestBody EmailAndPasswordDto emailAndPasswordDto) {
         UserDto userDto = authService.signIn(emailAndPasswordDto);
-        TokenDto tokenDto = jwtUtils.generateTokens(userDto);
-        tokenUserService.updateUserToken(tokenDto.getRefreshToken(), userDto);
-
-        return tokenDto;
+        return getTokenDto(userDto);
     }
 
     @PostMapping("/signup")
@@ -63,5 +64,17 @@ public class AuthController {
         UserDto userDto = jwtUtils.getUserDtoFromRefreshToken(tokenDto.getRefreshToken());
 
         tokenUserService.deleteUserToken(userDto);
+    }
+
+    @GetMapping("/vk")
+    public TokenDto socialVk(@RequestParam String code) {
+        return getTokenDto(vkAuthService.auth(code));
+    }
+
+    private TokenDto getTokenDto(UserDto userDto) {
+        TokenDto tokenDto = jwtUtils.generateTokens(userDto);
+        tokenUserService.updateUserToken(tokenDto.getRefreshToken(), userDto);
+
+        return tokenDto;
     }
 }

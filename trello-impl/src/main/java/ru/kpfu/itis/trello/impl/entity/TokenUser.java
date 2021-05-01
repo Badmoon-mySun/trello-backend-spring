@@ -25,6 +25,6 @@ public class TokenUser {
     @OneToOne
     private User user;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 512)
     private String token;
 }
