@@ -24,12 +24,6 @@ public class UserController {
 
     @PostMapping
     public String saveUser() {
-        userService.save(UserDto.builder()
-                .id(1L)
-                .email("anvar00755@mail.ru")
-                .nickname("Anvar")
-                .build()
-        );
 
         return "ok";
     }

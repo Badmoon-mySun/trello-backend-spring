@@ -44,7 +44,8 @@ public class VKAuthServiceImpl implements VKAuthService {
 
             VKUserDto vkUserDto = vkUtils.getUser(authToken);
             User user = User.builder()
-                    .nickname(vkUserDto.getFirstName() + " " + vkUserDto.getLastName())
+                    .fullName(vkUserDto.getFirstName() + " " + vkUserDto.getLastName())
+                    .username(authToken.getUserId().toString())
                     .email(authToken.getEmail())
                     .role(User.Role.USER)
                     .build();

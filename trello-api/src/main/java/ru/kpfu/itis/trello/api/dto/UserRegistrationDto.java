@@ -21,7 +21,10 @@ public class UserRegistrationDto {
     private String email;
 
     @NotBlank
-    private String nickname;
+    private String fullName;
+
+    @NotBlank
+    private String username;
 
     @NotBlank
     private String password;

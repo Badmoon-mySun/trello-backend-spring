@@ -1,6 +1,7 @@
 package ru.kpfu.itis.trello.web.security.jwt;
 
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -20,6 +21,9 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain) throws ServletException, IOException {
@@ -37,12 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String extractJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        String bearer = "Bearer ";
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(bearer)) {
-            return bearerToken.substring(bearer.length());
-        }
-        return null;
+        return jwtUtils.getClearToken(bearerToken);
     }
 
 }

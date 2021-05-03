@@ -1,6 +1,7 @@
 package ru.kpfu.itis.trello.web.security.jwt;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AccountExpiredException;
@@ -35,9 +36,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
             tokenAuthentication.setAuthenticated(true);
             tokenAuthentication.setUserDetails(userDetails);
-        } catch (JWTDecodeException e) {
+        } catch (JWTDecodeException | TokenExpiredException e) {
             //TODO change exception class
-            throw new AccountExpiredException("Token authentication failed");
+            throw new AccountExpiredException("Token authentication failed \n" + e.getMessage());
         }
 
         return tokenAuthentication;

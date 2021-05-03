@@ -44,7 +44,8 @@ public class JwtUtils {
         return JWT.create()
                 .withSubject(userDto.getId().toString())
                 .withClaim("email", userDto.getEmail())
-                .withClaim("nickname", userDto.getNickname())
+                .withClaim("fullName", userDto.getFullName())
+                .withClaim("username", userDto.getUsername())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + refreshExpirationInMs))
                 .withClaim("isRefresh", "true")
@@ -55,8 +56,9 @@ public class JwtUtils {
 
         return JWT.create()
                 .withSubject(userDto.getId().toString())
+                .withClaim("fullName", userDto.getFullName())
+                .withClaim("username", userDto.getUsername())
                 .withClaim("email", userDto.getEmail())
-                .withClaim("nickname", userDto.getNickname())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + accessExpirationInMs))
                 .sign(Algorithm.HMAC256(secret));
@@ -73,7 +75,16 @@ public class JwtUtils {
         }
 
         DecodedJWT decodedJWT = getVerification().verify(token);
-        UserDto userDto = modelMapper.map(decodedJWT.getClaims(), UserDto.class);
+
+        Map<String, String> clearClaims = new HashMap<>();
+
+        Map<String, Claim> claims = decodedJWT.getClaims();
+        claims.keySet().forEach(key -> {
+            String field = claims.get(key).toString();
+            clearClaims.put(key, field.substring(1, field.length() - 1));
+        });
+
+        UserDto userDto = modelMapper.map(clearClaims, UserDto.class);
         userDto.setId(Long.valueOf(decodedJWT.getSubject()));
 
         return userDto;
@@ -113,5 +124,15 @@ public class JwtUtils {
 
     private JWTVerifier getVerification() {
         return JWT.require(Algorithm.HMAC256(secret)).build();
+    }
+
+    public String getClearToken(String tokenWithBearer) {
+        String bearer = "Bearer ";
+
+        if (StringUtils.hasText(tokenWithBearer) && tokenWithBearer.startsWith(bearer)) {
+            return tokenWithBearer.substring(bearer.length());
+        }
+
+        return null;
     }
 }
