@@ -78,6 +78,7 @@ public class AuthController {
         return tokenDto;
     }
 
+    //TODO Authentication get principal
     @GetMapping("/me")
     public UserDto getUserInfo(@RequestHeader("Authorization") String bearerToken) {
         String jwtToken = jwtUtils.getClearToken(bearerToken);

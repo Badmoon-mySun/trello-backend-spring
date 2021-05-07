@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.kpfu.itis.trello.api.dto.ResponseMessageDto;
 import ru.kpfu.itis.trello.api.exception.AuthorizationException;
+import ru.kpfu.itis.trello.api.exception.ResourceNotFoundException;
 
 /**
  * @author Anvar Khasanov
@@ -17,9 +18,14 @@ import ru.kpfu.itis.trello.api.exception.AuthorizationException;
 public class AdviceController {
 
     @ExceptionHandler({AuthorizationException.class, JWTVerificationException.class})
-    public ResponseEntity<ResponseMessageDto> handleException(Exception exception) {
+    public ResponseEntity<ResponseMessageDto> handleAuthException(Exception exception) {
         ResponseMessageDto message = new ResponseMessageDto(HttpStatus.UNAUTHORIZED.value(), exception.getMessage());
         return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler({ResourceNotFoundException.class})
+    public ResponseEntity<ResponseMessageDto> handleRequestException(Exception exception) {
+        ResponseMessageDto message = new ResponseMessageDto(HttpStatus.NOT_FOUND.value(), exception.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
 }

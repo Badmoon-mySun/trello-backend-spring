@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * @author Anvar Khasanov
@@ -31,6 +32,9 @@ public class User {
     private String email;
 
     private String hashPassword;
+
+    @ManyToMany
+    private Set<Board> boards;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;

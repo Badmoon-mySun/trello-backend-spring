@@ -1,5 +1,6 @@
 package ru.kpfu.itis.trello.api.validation.validator;
 
+import org.springframework.util.StringUtils;
 import ru.kpfu.itis.trello.api.validation.annotation.ValidEmail;
 
 import javax.validation.ConstraintValidator;
@@ -19,7 +20,11 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context){
-        return (validateEmail(email));
+        if (StringUtils.hasText(email)) {
+            return (validateEmail(email));
+        }
+
+        return false;
     }
 
     private boolean validateEmail(String email) {
