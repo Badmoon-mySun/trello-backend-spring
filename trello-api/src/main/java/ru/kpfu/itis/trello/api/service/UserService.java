@@ -14,4 +14,5 @@ import java.util.Optional;
 public interface UserService {
     Optional<UserDto> findById(Long id);
     UserDto save(UserDto userDto);
+    UserDto getUser(Long userId);
 }

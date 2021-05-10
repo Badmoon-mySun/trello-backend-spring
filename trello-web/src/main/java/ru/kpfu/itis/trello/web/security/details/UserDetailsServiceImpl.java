@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import ru.kpfu.itis.trello.impl.aspect.Logging;
 import ru.kpfu.itis.trello.impl.entity.User;
 import ru.kpfu.itis.trello.impl.jpa.repository.UserRepository;
 import ru.kpfu.itis.trello.web.security.jwt.JwtUtils;
@@ -25,6 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Logging
     @Override
     public UserDetails loadUserByUsername(String jwtToken) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findById(jwtUtils.getUserIdByToken(jwtToken));

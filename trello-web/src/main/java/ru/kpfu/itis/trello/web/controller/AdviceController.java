@@ -24,7 +24,7 @@ public class AdviceController {
         return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler({ResourceNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class, NumberFormatException.class})
     public ResponseEntity<ResponseMessageDto> handleRequestException(Exception exception) {
         ResponseMessageDto message = new ResponseMessageDto(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);

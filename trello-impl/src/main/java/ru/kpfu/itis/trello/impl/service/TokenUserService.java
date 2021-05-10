@@ -32,17 +32,14 @@ public class TokenUserService implements TokenService {
     public void updateUserToken(String refreshToken, String newRefresh) {
         if (StringUtils.hasLength(refreshToken)) {
             Optional<TokenUser> optionalTokenUser = tokenUserRepository.findByToken(refreshToken);
-            System.out.println(1);
 
             if (optionalTokenUser.isPresent()) {
                 TokenUser tokenUser = optionalTokenUser.get();
-                System.out.println(2);
 
                 if (tokenUser.getToken().equals(refreshToken)) {
                     tokenUser.setToken(newRefresh);
                     tokenUserRepository.save(tokenUser);
 
-                    System.out.println(3);
                     return;
                 }
             }

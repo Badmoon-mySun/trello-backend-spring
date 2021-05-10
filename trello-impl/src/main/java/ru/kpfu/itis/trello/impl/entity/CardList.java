@@ -1,9 +1,13 @@
 package ru.kpfu.itis.trello.impl.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Anvar Khasanov
@@ -15,25 +19,21 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"cardList"})
-@EqualsAndHashCode(exclude = {"cardList"})
-public class Card {
+@Table(name = "card_list")
+public class CardList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    private String title;
 
-    private Double position;
+    @ManyToOne
+    private Board board;
 
-    private String description;
+    @OneToMany
+    @JoinColumn(name = "card_list_id")
+    private List<Card> cards;
 
     @Enumerated(value = EnumType.STRING)
     private Status status;
-
-    @ManyToOne
-    private CardList cardList;
-
-    @OneToMany(mappedBy = "card")
-    private List<CardImages> images;
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,14 +18,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardDto {
-
     private Long id;
-
-    @NotNull
     @NotBlank
     private String title;
-
-    private Set<UserDto> members;
-
-    private Set<CardDto> cards;
+    private String background;
+    private List<UserDto> members;
+    private List<CardListDto> cardLists;
 }

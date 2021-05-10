@@ -3,6 +3,7 @@ package ru.kpfu.itis.trello.api.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldNameConstants;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -15,13 +16,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardCreationDto {
+public class CardListCreationDto {
     @NotBlank
     private String name;
 
     @NotNull
-    private Double position;
-
-    @NotNull
-    private Long cardListId;
+    private Long boardId;
 }

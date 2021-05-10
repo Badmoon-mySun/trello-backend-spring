@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwtToken = extractJwtFromRequest(request);
 
         if (StringUtils.hasText(jwtToken)) {
-            // TODO check that this is not refresh token
             JwtAuthentication authentication = new JwtAuthentication(jwtToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -44,5 +43,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         return jwtUtils.getClearToken(bearerToken);
     }
-
 }

@@ -17,10 +17,7 @@ import ru.kpfu.itis.trello.impl.jpa.repository.BoardRepository;
 import ru.kpfu.itis.trello.impl.jpa.repository.UserRepository;
 import ru.kpfu.itis.trello.impl.utils.FileUtils;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -62,7 +59,7 @@ public class BoardServiceImpl implements BoardService {
         if (optionalUser.isPresent() && StringUtils.hasText(title)) {
             Board board = Board.builder()
                     .title(title)
-                    .members(Collections.singleton(optionalUser.get()))
+                    .members(Collections.singletonList(optionalUser.get()))
                     .build();
 
             board = boardRepository.save(board);
@@ -77,7 +74,7 @@ public class BoardServiceImpl implements BoardService {
         Optional<User> optionalUser = userRepository.findUserById(userId);
 
         if (optionalUser.isPresent()) {
-            Set<Board> boards = optionalUser.get().getBoards();
+            List<Board> boards = optionalUser.get().getBoards();
 
             return boards.stream()
                     .map(board -> modelMapper.map(board, BoardMinDto.class))
@@ -97,6 +94,41 @@ public class BoardServiceImpl implements BoardService {
             if (checkUserHaveBoard(board, userId)) {
                 board.setBackground(fileName);
                 boardRepository.save(board);
+
+                return;
+            }
+        }
+
+        throw new ResourceNotFoundException("Board not found");
+    }
+
+    public BoardDto updateBoard(BoardDto boardDto, Long userId) {
+        Optional<Board> optionalBoard = boardRepository.findById(boardDto.getId());
+
+        if (optionalBoard.isPresent()) {
+            Board board = optionalBoard.get();
+
+            if (checkUserHaveBoard(board, userId)) {
+                modelMapper.map(boardDto, board);
+
+                board = boardRepository.save(board);
+
+                return modelMapper.map(board, BoardDto.class);
+            }
+        }
+
+        throw new ResourceNotFoundException("Board for update not found");
+    }
+
+    @Override
+    public void deleteBoard(BoardDto boardDto, Long userId) {
+        Optional<Board> optionalBoard = boardRepository.findById(boardDto.getId());
+
+        if (optionalBoard.isPresent()) {
+            Board board = optionalBoard.get();
+
+            if (checkUserHaveBoard(board, userId)) {
+                boardRepository.delete(board);
 
                 return;
             }

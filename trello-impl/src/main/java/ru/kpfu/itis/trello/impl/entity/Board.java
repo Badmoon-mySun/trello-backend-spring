@@ -16,8 +16,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"members", "cards"})
-@EqualsAndHashCode(exclude = {"members", "cards"})
+@ToString(exclude = {"members", "cardLists"})
+@EqualsAndHashCode(exclude = {"members", "cardLists"})
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,9 +29,9 @@ public class Board {
 
     @ManyToMany
     @JoinTable(name = "board_members")
-    private Set<User> members;
+    private List<User> members;
 
     @OneToMany
     @JoinColumn(name = "board_id")
-    private Set<Card> cards;
+    private List<CardList> cardLists;
 }

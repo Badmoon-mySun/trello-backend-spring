@@ -9,6 +9,9 @@ import ru.kpfu.itis.trello.api.dto.CardDto;
  * group 11-905
  */
 public interface CardService {
-    CardDto getUserCard(Long cardId, Long userId);
-    CardDto createCard(CardCreationDto cardCreationDto, Long userId);
+    CardDto getUserCard(Long cardId);
+    CardDto createCard(CardCreationDto cardCreationDto);
+    CardDto updateCard(CardDto cardDto);
+    void deleteCard(CardDto cardDto);
+    void addCardImage(String fileName, Long id);
 }

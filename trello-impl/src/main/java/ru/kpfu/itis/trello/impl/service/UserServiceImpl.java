@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.kpfu.itis.trello.api.dto.UserDto;
+import ru.kpfu.itis.trello.api.exception.ResourceNotFoundException;
 import ru.kpfu.itis.trello.api.service.UserService;
 import ru.kpfu.itis.trello.impl.entity.User;
 import ru.kpfu.itis.trello.impl.jpa.repository.UserRepository;
@@ -40,10 +41,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserDto userDto) {
-        // TODO why user id set null?
         User user = userRepository.save(modelMapper.map(userDto, User.class));
         user.setRole(User.Role.USER);
         return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public UserDto getUser(Long userId) {
+        Optional<User> optionalUser = userRepository.findUserById(userId);
+
+        if (optionalUser.isPresent()) {
+            return modelMapper.map(optionalUser.get(), UserDto.class);
+        }
+
+        throw new ResourceNotFoundException("User not found");
     }
 
 //    @Override

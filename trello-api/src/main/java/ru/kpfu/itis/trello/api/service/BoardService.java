@@ -15,4 +15,6 @@ public interface BoardService {
     BoardDto createBoard(String title, Long userId);
     Set<BoardMinDto> getUserBoards(Long userId);
     void setBoardBackground(String fileName, Long boardId, Long userId);
+    BoardDto updateBoard(BoardDto boardDto, Long userId);
+    void deleteBoard(BoardDto boardDto, Long userId);
 }

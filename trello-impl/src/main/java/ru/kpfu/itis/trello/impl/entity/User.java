@@ -3,6 +3,7 @@ package ru.kpfu.itis.trello.impl.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -33,7 +34,7 @@ public class User {
     private String hashPassword;
 
     @ManyToMany(mappedBy = "members")
-    private Set<Board> boards;
+    private List<Board> boards;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
