@@ -1,6 +1,9 @@
 package ru.kpfu.itis.trello.api.service;
 
 import ru.kpfu.itis.trello.api.dto.BoardDto;
+import ru.kpfu.itis.trello.api.dto.BoardMinDto;
+
+import java.util.Set;
 
 /**
  * @author Anvar Khasanov
@@ -9,5 +12,7 @@ import ru.kpfu.itis.trello.api.dto.BoardDto;
  */
 public interface BoardService {
     BoardDto getUserBoard(Long boardId, Long userId);
-    void createBoard(String title, Long userId);
+    BoardDto createBoard(String title, Long userId);
+    Set<BoardMinDto> getUserBoards(Long userId);
+    void setBoardBackground(String fileName, Long boardId, Long userId);
 }

@@ -30,3 +30,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/trello-web/src/main/resources/files/

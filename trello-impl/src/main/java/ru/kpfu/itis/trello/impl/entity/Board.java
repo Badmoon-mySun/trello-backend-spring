@@ -16,8 +16,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"members"})
-@EqualsAndHashCode(exclude = {"members"})
+@ToString(exclude = {"members", "cards"})
+@EqualsAndHashCode(exclude = {"members", "cards"})
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,10 +25,10 @@ public class Board {
 
     private String title;
 
-    @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private String background;
 
     @ManyToMany
+    @JoinTable(name = "board_members")
     private Set<User> members;
 
     @OneToMany

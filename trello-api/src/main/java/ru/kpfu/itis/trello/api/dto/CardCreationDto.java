@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 /**
  * @author Anvar Khasanov
@@ -16,15 +15,13 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardDto {
-
-    private Long id;
+public class CardCreationDto {
+    @NotBlank
+    private String name;
 
     @NotNull
-    @NotBlank
-    private String title;
+    private Double position;
 
-    private Set<UserDto> members;
-
-    private Set<CardDto> cards;
+    @NotNull
+    private Long boardId;
 }

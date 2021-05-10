@@ -1,6 +1,7 @@
 package ru.kpfu.itis.trello.web.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,5 +28,11 @@ public class AdviceController {
     public ResponseEntity<ResponseMessageDto> handleRequestException(Exception exception) {
         ResponseMessageDto message = new ResponseMessageDto(HttpStatus.NOT_FOUND.value(), exception.getMessage());
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({FileSizeLimitExceededException.class})
+    public ResponseEntity<ResponseMessageDto> handleFileException(Exception exception) {
+        ResponseMessageDto message = new ResponseMessageDto(HttpStatus.PAYLOAD_TOO_LARGE.value(), exception.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.PAYLOAD_TOO_LARGE);
     }
 }

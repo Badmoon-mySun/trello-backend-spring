@@ -1,9 +1,6 @@
 package ru.kpfu.itis.trello.impl.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -18,6 +15,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"boards"})
+@EqualsAndHashCode(exclude = {"boards"})
 @Table(name = "account")
 public class User {
     @Id
@@ -33,7 +32,7 @@ public class User {
 
     private String hashPassword;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "members")
     private Set<Board> boards;
 
     @Enumerated(value = EnumType.STRING)

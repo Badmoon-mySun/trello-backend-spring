@@ -37,8 +37,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             tokenAuthentication.setAuthenticated(true);
             tokenAuthentication.setUserDetails(userDetails);
         } catch (JWTDecodeException | TokenExpiredException e) {
-            //TODO change exception class
-            throw new AccountExpiredException("Token authentication failed \n" + e.getMessage());
+            throw new AuthenticationException("Token authentication failed \n" + e.getMessage()) {};
         }
 
         return tokenAuthentication;

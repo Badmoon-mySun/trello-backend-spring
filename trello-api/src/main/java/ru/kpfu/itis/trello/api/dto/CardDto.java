@@ -17,7 +17,7 @@ import java.util.List;
 public class CardDto {
     private Long id;
     private String name;
-    private String position;
+    private Double position;
     private String status;
     private List<String> images;
     private Long boardId;

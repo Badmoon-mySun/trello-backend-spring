@@ -1,7 +1,9 @@
 package ru.kpfu.itis.trello.api.service;
 
+import ru.kpfu.itis.trello.api.dto.BoardDto;
 import ru.kpfu.itis.trello.api.dto.UserDto;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
